@@ -29,7 +29,7 @@ app.use('/', userRouter);
 app.use('/', cardRouter);
 
 app.all('/*', (req, res) => {
-  res.status(STATUS_CODES.NOT_FOUND).send({ message: 'Страница существует' });
+  res.status(STATUS_CODES.NOT_FOUND).send({ message: 'Страница не существует' });
 });
 
 app.listen(PORT, () => {
