@@ -20,7 +20,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use((req, res, next) => {
   req.user = {
-    _id: '6464de4a7fb99b64ba44324d',
+    _id: '6475c042db824e6c99dc994f',
   };
   next();
 });
@@ -29,7 +29,7 @@ app.use('/', userRouter);
 app.use('/', cardRouter);
 
 app.all('/*', (req, res) => {
-  res.status(STATUS_CODES.NOT_FOUND).send({ message: 'Страница не существует' });
+  res.status(STATUS_CODES.NOT_FOUND).send({ message: 'Страница существует' });
 });
 
 app.listen(PORT, () => {
