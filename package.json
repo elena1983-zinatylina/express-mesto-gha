@@ -18,6 +18,7 @@
   "homepage": "https://github.com/elena1983-zinatylina/express-mesto-gha#readme",
   "devDependencies": {
     "eslint": "^8.41.0",
-    "eslint-config-airbnb-base": "^15.0.0"
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.27.5"
   }
 }
