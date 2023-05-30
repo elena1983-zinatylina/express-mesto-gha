@@ -5,7 +5,7 @@ const userRouter = require('./routes/users');
 const cardRouter = require('./routes/cards');
 const { STATUS_CODES } = require('./utils/constants');
 
-const { PORT = 3000, MONGO_URL = 'mongodb:// 127.0.0.1:27017/mestodb' } = process.env;
+const { PORT = 3000, MONGO_URL = 'mongodb://127.0.0.1/mestodb' } = process.env;
 
 const app = express();
 
@@ -20,7 +20,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use((req, res, next) => {
   req.user = {
-    _id: '"DESKTOP-E52VHJ0-1685361217253"',
+    _id: '6464de4a7fb99b64ba44324d',
   };
   next();
 });
