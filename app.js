@@ -8,6 +8,7 @@ const auth = require('./middlewares/auth');
 const { createUser, login } = require('./controllers/users');
 const { signinValidator, signupValidator } = require('./middlewares/validation');
 const NotFoundError = require('./utils/errors/NotFoundError');
+
 const { PORT = 3000, MONGO_URL = 'mongodb://127.0.0.1/mestodb' } = process.env;
 
 const app = express();
@@ -23,7 +24,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.post('/signin', signinValidator, login);
 app.post('/signup', signupValidator, createUser);
-
 
 app.use(auth);
 
