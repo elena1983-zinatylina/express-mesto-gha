@@ -1,7 +1,7 @@
-const User = require('../models/user');
-const { STATUS_CODES } = require('../utils/constants');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const User = require('../models/user');
+const { STATUS_CODES } = require('../utils/constants');
 const BadRequestError = require('../utils/errors/BadRequestError');
 const ConflictError = require('../utils/errors/ConflictError');
 const NotFoundError = require('../utils/errors/NotFoundError');

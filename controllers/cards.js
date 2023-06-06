@@ -10,7 +10,6 @@ const getCards = (req, res, next) => {
     .catch(next);
 };
 
-
 const createCard = (req, res, next) => {
   const { name, link } = req.body;
 
@@ -23,7 +22,6 @@ const createCard = (req, res, next) => {
       return next(err);
     });
 };
-
 
 const deleteCard = (req, res, next) => {
   Card.findById(req.params.cardId)
