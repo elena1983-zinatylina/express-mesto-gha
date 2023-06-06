@@ -1,47 +1,50 @@
 const Card = require('../models/card');
 const { STATUS_CODES } = require('../utils/constants');
+const BadRequestError = require('../utils/errors/BadRequestError');
+const NotFoundError = require('../utils/errors/NotFoundError');
+const ForbiddenError = require('../utils/errors/ForbiddenError');
 
-const getCards = (req, res) => {
+const getCards = (req, res, next) => {
   Card.find({})
     .then((cards) => res.status(STATUS_CODES.OK).send({ cards }))
-    .catch(() => res.status(STATUS_CODES.SERVER_ERROR).send({ message: 'На сервере произошла ошибка' }));
+    .catch(next);
 };
 
-const createCard = (req, res) => {
-  console.log(req.user._id);
 
+const createCard = (req, res, next) => {
   const { name, link } = req.body;
 
   return Card.create({ name, link, owner: req.user._id })
     .then((card) => res.status(STATUS_CODES.CREATED).send({ card }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(STATUS_CODES.BAD_REQUEST).send({ message: 'Введены некорректные данные при создании карточки' });
-      } else {
-        res.status(STATUS_CODES.SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
+        return next(new BadRequestError('Введены некорректные данные'));
       }
+      return next(err);
     });
 };
 
-const deleteCard = (req, res) => {
-  Card.findByIdAndRemove(req.params.cardId)
+
+const deleteCard = (req, res, next) => {
+  Card.findById(req.params.cardId)
     .then((card) => {
       if (!card) {
-        res.status(STATUS_CODES.NOT_FOUND).send({ message: 'Карточка не найдена' });
-        return;
+        throw new NotFoundError('Карточка не найдена');
       }
-      res.status(STATUS_CODES.OK).send({ data: card });
+      if (card.owner.toString() !== req.user._id) {
+        throw new ForbiddenError('Нет прав на удаление карточки');
+      }
+      Card.findByIdAndRemove(req.params.cardId).then(() => res.send({ message: 'Карточка удалена' })).catch(next);
     })
     .catch((err) => {
-      if (err.name === 'CastError') {
-        res.status(STATUS_CODES.BAD_REQUEST).send({ message: 'Введены некорректные данные' });
-      } else {
-        res.status(STATUS_CODES.SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
+      if (err.name === 'ValidationError' || err.name === 'CastError') {
+        return next(new BadRequestError('Введены некорректные данные'));
       }
+      return next(err);
     });
 };
 
-const likeCard = (req, res) => {
+const likeCard = (req, res, next) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $addToSet: { likes: req.user._id } },
@@ -49,21 +52,19 @@ const likeCard = (req, res) => {
   )
     .then((card) => {
       if (!card) {
-        res.status(STATUS_CODES.NOT_FOUND).send({ message: 'Карточка не найдена' });
-        return;
+        throw new NotFoundError('Карточка не найдена');
       }
       res.status(STATUS_CODES.OK).send({ data: card });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(STATUS_CODES.BAD_REQUEST).send({ message: 'Введены некорректные данные' });
-      } else {
-        res.status(STATUS_CODES.SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
+        return next(new BadRequestError('Введены некорректные данные'));
       }
+      return next(err);
     });
 };
 
-const dislikeCard = (req, res) => {
+const dislikeCard = (req, res, next) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $pull: { likes: req.user._id } },
@@ -71,17 +72,15 @@ const dislikeCard = (req, res) => {
   )
     .then((card) => {
       if (!card) {
-        res.status(STATUS_CODES.NOT_FOUND).send({ message: 'Карточка не найдена' });
-        return;
+        throw new NotFoundError('Карточка не найдена');
       }
       res.status(STATUS_CODES.OK).send({ data: card });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(STATUS_CODES.BAD_REQUEST).send({ message: 'Введены некорректные данные' });
-      } else {
-        res.status(STATUS_CODES.SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
+        return next(new BadRequestError('Введены некорректные данные'));
       }
+      return next(err);
     });
 };
 
