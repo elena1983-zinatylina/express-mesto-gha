@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema({
   avatar: {
     type: String,
     default:
-      'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
+      'http://vsegda-pomnim.com/uploads/posts/2022-04/1651219263_52-vsegda-pomnim-com-p-yagodi-azii-foto-58.jpg',
     validate: [isURL],
   },
   email: {

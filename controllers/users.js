@@ -40,6 +40,7 @@ const createUser = (req, res, next) => {
           },
         },
       ))
+       // данные не записались, вернём ошибку
     .catch((err) => {
       if (err.name === 'ValidationError') {
         return next(new BadRequestError('Введены некорректные данные'));

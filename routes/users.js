@@ -13,7 +13,7 @@ const {
   userInfoValidator,
   userAvatarValidator,
 } = require('../middlewares/validation');
-
+// роуты пользователей
 userRouter.get('/users', getUsers);
 userRouter.get('/users/me', findCurrentUser);
 userRouter.get('/users/:userId', userIdValidator, getUserById);
