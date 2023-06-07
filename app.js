@@ -18,14 +18,18 @@ mongoose.connect(MONGO_URL)
   .catch((err) => console.log('Ошибка подключения к БД', err));
 
 mongoose.set({ runValidators: true });
+
 // подключаю парсеры
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
 // роуты  пользователя
 app.post('/signin', signinValidator, login);
 app.post('/signup', signupValidator, createUser);
+
 // Защита авторизацией
 app.use(auth);
+
 // подключаю роутинг
 app.use('/', userRouter);
 app.use('/', cardRouter);
@@ -33,6 +37,7 @@ app.use('/', cardRouter);
 app.all('/*', (req, res, next) => {
   next(new NotFoundError('Страница не существует'));
 });
+
 // обработчики ошибок
 app.use(errors());
 app.use((err, req, res, next) => {

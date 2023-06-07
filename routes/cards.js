@@ -11,6 +11,7 @@ const {
 const {
   cardValidator, cardIdValidator,
 } = require('../middlewares/validation');
+
 // роуты карточек
 cardRouter.get('/cards', getCards);
 cardRouter.post('/cards', cardValidator, createCard);

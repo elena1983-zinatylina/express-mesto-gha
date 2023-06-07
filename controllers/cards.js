@@ -15,6 +15,7 @@ const createCard = (req, res, next) => {
 
   return Card.create({ name, link, owner: req.user._id })
     .then((card) => res.status(STATUS_CODES.CREATED).send({ card }))
+    
     // данные не записались, вернём ошибку
     .catch((err) => {
       if (err.name === 'ValidationError') {
